@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList, StatusBar, Platform } from 'react-native';
 
-class EntryDetail extends Component {
+class Card extends Component {
     render () {
         return (
             <View style={styles.container}>
@@ -23,4 +23,4 @@ const styles = StyleSheet.create({
     },
     });
 
-export default EntryDetail
+export default Card
