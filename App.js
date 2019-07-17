@@ -1,4 +1,7 @@
 import React from 'react';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 import { StyleSheet, Text, View, FlatList, StatusBar, Platform } from 'react-native';
 import { purple, white } from './utils/colors'
 import Constants from 'expo-constants'
@@ -60,18 +63,17 @@ const MainNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(MainNavigator);
 
-export default createAppContainer(MainNavigator);
+//export default createAppContainer(MainNavigator);
 
-/*export default class App extends React.Component {
+export default class App extends React.Component {
   render () {
     return (
-      <View style={styles.container}>
-        <UdaciStatusBar backgroundColor={purple} barStyle="light-content" />
-        <AppContainer></AppContainer>
-      </View>
+      <Provider store={createStore(reducer)}>
+        <AppContainer/>
+      </Provider>
     )
   }
-}*/
+}
 
 
 const styles = StyleSheet.create({
