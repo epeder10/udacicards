@@ -9,7 +9,7 @@ class HomeScreen extends React.Component {
         this.props.dispatch(receiveEntries())
     }
 
-    submit = (item) => {
+    showBook = (item) => {
         const pushAction = StackActions.push({
             routeName: 'Deck',
             params: {
@@ -19,7 +19,7 @@ class HomeScreen extends React.Component {
           
         this.props.navigation.dispatch(pushAction);
     }
-    
+
     render() {
         if (Object.keys(this.props.decks).length == 0) {
             return (
@@ -35,10 +35,10 @@ class HomeScreen extends React.Component {
                     data={Object.keys(this.props.decks)}
                     renderItem={({item}) => 
                     <TouchableOpacity
-                        onPress={this.submit.bind(item)}>
+                        onPress={(e) => this.showBook(item)}>
                         <View style={styles.deck}>
-                            <Text style={styles.heading} keyItem={item}>{item}</Text>
-                            <Text style={styles.text} keyItem={item}>{this.props.decks[item]['cards'].length} cards in deck</Text>
+                            <Text style={styles.heading} >{item}</Text>
+                            <Text style={styles.text} >{this.props.decks[item]['cards'].length} cards in deck</Text>
                         </View>
                     </TouchableOpacity>
                     }

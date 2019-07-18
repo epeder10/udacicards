@@ -21,12 +21,11 @@ class Deck extends Component {
     }
 
     render () {
-        alert(this.props.navigation.state.params.deck);
         const key = this.props.navigation.state.params.deck
         const deck = this.props.decks[key]
         return (
             <View style={styles.container}>
-                <Text style={styles.heading}>Deck {key}</Text>
+                <Text style={styles.heading}>{key}</Text>
                 <Text style={styles.heading}>Number of cards: {deck['cards'].length}</Text>
                 <TouchableOpacity
                     style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
