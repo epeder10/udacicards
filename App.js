@@ -10,14 +10,7 @@ import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import AddDeck from './components/AddDeck'
 import Deck from './components/Deck'
 import HomeScreen from './components/HomeScreen'
-
-function UdaciStatusBar ({backgroundColor, ...props}) {
-  return (
-    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-    </View>
-  )
-}
+import AddQuestion from './components/AddQuestion'
 
 class SettingsScreen extends React.Component {
   render() {
@@ -58,12 +51,28 @@ const MainNavigator = createStackNavigator({
         backgroundColor: purple,
       }
     }
+  },
+  AddDeck: {
+    screen: AddDeck,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  AddQuestion: {
+    screen: AddQuestion,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
   }
 })
 
 const AppContainer = createAppContainer(MainNavigator);
-
-//export default createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
   render () {

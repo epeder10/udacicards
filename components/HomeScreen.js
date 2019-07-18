@@ -1,13 +1,25 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, FlatList, Platform } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Platform, TouchableOpacity } from 'react-native';
 import { receiveEntries } from '../actions/index'
+import { StackActions } from 'react-navigation';
 
 class HomeScreen extends React.Component {
     componentDidMount() {
         this.props.dispatch(receiveEntries())
     }
 
+    submit = (item) => {
+        const pushAction = StackActions.push({
+            routeName: 'Deck',
+            params: {
+                deck: item,
+              },
+        });
+          
+        this.props.navigation.dispatch(pushAction);
+    }
+    
     render() {
         if (Object.keys(this.props.decks).length == 0) {
             return (
@@ -22,10 +34,13 @@ class HomeScreen extends React.Component {
                 <FlatList
                     data={Object.keys(this.props.decks)}
                     renderItem={({item}) => 
-                    <View style={styles.deck}>
-                        <Text style={styles.heading} keyItem={item}>{item}</Text>
-                        <Text style={styles.text} keyItem={item}>{this.props.decks[item]['cards'].length} cards in deck</Text>
-                    </View>
+                    <TouchableOpacity
+                        onPress={this.submit.bind(item)}>
+                        <View style={styles.deck}>
+                            <Text style={styles.heading} keyItem={item}>{item}</Text>
+                            <Text style={styles.text} keyItem={item}>{this.props.decks[item]['cards'].length} cards in deck</Text>
+                        </View>
+                    </TouchableOpacity>
                     }
                     keyExtractor={(item, index) => index.toString()}
                 />

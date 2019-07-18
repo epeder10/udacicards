@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { purple, white } from '../utils/colors';
-import { NavigationActions } from 'react-navigation';
+import { StackActions } from 'react-navigation';
 import { addEntry } from '../actions/index'
 import { submitEntry } from '../utils/api'
 
@@ -15,7 +15,7 @@ function SubmitBtn ({ onPress }) {
           <Text style={styles.submitBtnText}>SUBMIT</Text>
       </TouchableOpacity>
     )
-  }
+}
 
 class AddDeck extends Component {
 
@@ -29,15 +29,22 @@ class AddDeck extends Component {
     
         this.setState(() => ({ text: ''}))
 
-        this.toHome()
+        this.toHome(key)
     
         submitEntry({ key, entry })
     
         // Clear local notification
     }
     
-    toHome = () => {
-        this.props.navigation.dispatch(NavigationActions.back({key: 'AddDeck'}))
+    toHome = (key) => {
+        const pushAction = StackActions.push({
+            routeName: 'Deck',
+            params: {
+              deck: key,
+            },
+        });
+          
+        this.props.navigation.dispatch(pushAction);
     }
 
     constructor(props) {
