@@ -13,15 +13,20 @@ class HomeScreen extends React.Component {
             return (
                 <View style={styles.container}>
                     <Text style={styles.heading}>There are no decks</Text>
-                    <Text>Create one below.</Text>
+                    <Text style={styles.text}>Create one below.</Text>
                 </View>
             )
         }
         return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <View style={styles.container}>
                 <FlatList
                     data={Object.keys(this.props.decks)}
-                    renderItem={({item}) => <Text keyItem={item}>{item}</Text>}
+                    renderItem={({item}) => 
+                    <View style={styles.deck}>
+                        <Text style={styles.heading} keyItem={item}>{item}</Text>
+                        <Text style={styles.text} keyItem={item}>{this.props.decks[item]['cards'].length} cards in deck</Text>
+                    </View>
+                    }
                     keyExtractor={(item, index) => index.toString()}
                 />
             </View>
@@ -30,9 +35,13 @@ class HomeScreen extends React.Component {
   }
   const styles = StyleSheet.create({
     container: {
-        paddingTop: 10,
         flex: 1,
-        alignItems: 'center'
+        paddingTop: 10,
+        paddingLeft: 5,
+        paddingRight: 5,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
     },
     heading: {
         fontSize: 22,
@@ -40,7 +49,22 @@ class HomeScreen extends React.Component {
         paddingBottom: 10,
         textAlign: 'center',
         fontWeight: 'bold'
-    }
+    },
+    text: {
+        fontSize: 18,
+        paddingTop: 10,
+        paddingBottom: 10,
+        textAlign: 'center',
+    },
+    deck: {
+        padding: 30,
+        margin: 0,
+        borderWidth: 1,
+        textAlign: 'center',    
+        borderColor: '#dad7d7',
+        borderStyle: 'solid',
+        borderRadius: 5,
+      }
 });
 function mapStateToProps (entries) {
     return {

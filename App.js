@@ -8,7 +8,7 @@ import Constants from 'expo-constants'
 import { createBottomTabNavigator, createStackNavigator, createAppContainer } from 'react-navigation'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import AddDeck from './components/AddDeck'
-import EntryDetail from './components/EntryDetail'
+import Deck from './components/Deck'
 import HomeScreen from './components/HomeScreen'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
@@ -50,8 +50,8 @@ const MainNavigator = createStackNavigator({
   Home: {
     screen: TabNavigator,
   },
-  EntryDetail: {
-    screen: EntryDetail,
+  Deck: {
+    screen: Deck,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
