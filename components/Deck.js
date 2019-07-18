@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, FlatList, StatusBar, Platform } from 'react-native';
 
+function SubmitBtn ({ onPress }) {
+    return (
+      <TouchableOpacity
+        style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
+        onPress={onPress}>
+          <Text style={styles.submitBtnText}>SUBMIT</Text>
+      </TouchableOpacity>
+    )
+  }
 
 class Deck extends Component {
     render () {

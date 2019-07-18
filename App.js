@@ -42,8 +42,8 @@ const TabNavigator = createBottomTabNavigator({
     navigationOptions: {
       tabBarLabel: 'Add Deck',
       tabBarIcon: ({ tintColor }) => <FontAwesome name='plus-square' size={30} color={tintColor} />
-    },
-  },
+    }
+  }
 });
 
 const MainNavigator = createStackNavigator({
