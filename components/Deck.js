@@ -5,8 +5,16 @@ import { white, purple } from '../utils/colors'
 import { connect } from 'react-redux';
 
 class Deck extends Component {
-    submit = () => {
-        alert('click');
+    startQuiz = () => {
+        const pushAction = StackActions.push({
+            routeName: 'Quiz',
+            params: {
+              deck: this.props.navigation.state.params.deck,
+              cardIndex: 0,
+            },
+        });
+          
+        this.props.navigation.dispatch(pushAction);
     }
 
     addQuestion = () => {
@@ -29,7 +37,7 @@ class Deck extends Component {
                 <Text style={styles.heading}>Number of cards: {deck['cards'].length}</Text>
                 <TouchableOpacity
                     style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
-                    onPress={this.submit}>
+                    onPress={this.startQuiz}>
                     <Text style={styles.submitBtnText}>Start Quiz</Text>
                 </TouchableOpacity>
                 <TouchableOpacity

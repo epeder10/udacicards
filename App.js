@@ -11,16 +11,7 @@ import AddDeck from './components/AddDeck'
 import Deck from './components/Deck'
 import HomeScreen from './components/HomeScreen'
 import AddQuestion from './components/AddQuestion'
-
-class SettingsScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Settings!</Text>
-      </View>
-    );
-  }
-}
+import Quiz from './components/Quiz'
 
 const TabNavigator = createBottomTabNavigator({
   Home: {
@@ -69,6 +60,15 @@ const MainNavigator = createStackNavigator({
   },
   AddQuestion: {
     screen: AddQuestion,
+    navigationOptions: {
+      headerTintColor: white,
+      headerStyle: {
+        backgroundColor: purple,
+      }
+    }
+  },
+  Quiz: {
+    screen: Quiz,
     navigationOptions: {
       headerTintColor: white,
       headerStyle: {
