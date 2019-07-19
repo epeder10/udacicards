@@ -1,10 +1,14 @@
 import React from 'react'
 import { connect } from 'react-redux';
-import { StyleSheet, Text, View, FlatList, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Platform, TouchableOpacity, Animated, Easing } from 'react-native';
 import { receiveEntries } from '../actions/index'
 import { StackActions } from 'react-navigation';
 
 class HomeScreen extends React.Component {
+    constructor(props) {
+        super(props)
+        this.opacityValue = new Animated.Value(0)
+    }
     componentDidMount() {
         this.props.dispatch(receiveEntries())
     }
@@ -20,7 +24,23 @@ class HomeScreen extends React.Component {
         this.props.navigation.dispatch(pushAction);
     }
 
+    opacity = (item) => {
+        this.opacityValue.setValue(0);
+        Animated.timing(
+          this.opacityValue,
+          {
+            toValue: 1,
+            duration: 1000,
+            easing: Easing.back()
+          }
+        ).start((e) => this.showBook(item));
+    }
+
     render() {
+        const opacity = this.opacityValue.interpolate({
+            inputRange: [0, 0.5, 1],
+            outputRange: [1, 0, 1]
+          });
         if (Object.keys(this.props.decks).length == 0) {
             return (
                 <View style={styles.container}>
@@ -34,13 +54,15 @@ class HomeScreen extends React.Component {
                 <FlatList
                     data={Object.keys(this.props.decks)}
                     renderItem={({item}) => 
-                    <TouchableOpacity
-                        onPress={(e) => this.showBook(item)}>
-                        <View style={styles.deck}>
-                            <Text style={styles.heading} >{item}</Text>
-                            <Text style={styles.text} >{this.props.decks[item]['cards'].length} cards in deck</Text>
-                        </View>
-                    </TouchableOpacity>
+                    <Animated.View style={[{opacity}]}>
+                        <TouchableOpacity
+                            onPress={(e) => this.opacity(item)}>
+                            <View style={styles.deck}>
+                                <Text style={styles.heading} >{item}</Text>
+                                <Text style={styles.text} >{this.props.decks[item]['cards'].length} cards in deck</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </Animated.View>
                     }
                     keyExtractor={(item, index) => index.toString()}
                 />
