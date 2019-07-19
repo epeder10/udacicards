@@ -35,11 +35,13 @@ class Deck extends Component {
             <View style={styles.container}>
                 <Text style={styles.heading}>{key}</Text>
                 <Text style={styles.heading}>Number of cards: {deck['cards'].length}</Text>
-                <TouchableOpacity
-                    style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
-                    onPress={this.startQuiz}>
-                    <Text style={styles.submitBtnText}>Start Quiz</Text>
-                </TouchableOpacity>
+                { deck.cards.length > 0 &&
+                    <TouchableOpacity
+                        style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
+                        onPress={this.startQuiz}>
+                        <Text style={styles.submitBtnText}>Start Quiz</Text>
+                    </TouchableOpacity>
+                }
                 <TouchableOpacity
                     style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
                     onPress={this.addQuestion}>
@@ -54,7 +56,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     submitBtnText: {
         color: white,
