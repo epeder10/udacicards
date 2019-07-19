@@ -12,6 +12,7 @@ import Deck from './components/Deck'
 import HomeScreen from './components/HomeScreen'
 import AddQuestion from './components/AddQuestion'
 import Quiz from './components/Quiz'
+import { setLocalNotification } from './utils/helpers'
 
 const TabNavigator = createBottomTabNavigator({
   Home: {
@@ -81,6 +82,10 @@ const MainNavigator = createStackNavigator({
 const AppContainer = createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
+  componentDidMount(){
+    setLocalNotification()
+  }
+
   render () {
     return (
       <Provider store={createStore(reducer)}>
