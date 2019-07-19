@@ -11,6 +11,8 @@ class Deck extends Component {
             params: {
               deck: this.props.navigation.state.params.deck,
               cardIndex: 0,
+              correctAnswer: 0,
+              questionsAnswered: 0
             },
         });
           

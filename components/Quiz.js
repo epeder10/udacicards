@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Switch } from 'react-native'
-import { StackActions } from 'react-navigation'
+import { StackActions, NavigationActions } from 'react-navigation'
 import { white, purple} from '../utils/colors'
 
 function ShowAnswerBtn ({ onPress }) {
@@ -48,13 +48,18 @@ class Quiz extends Component {
     }
 
     nextQuestion = () => {
-        const resetAction = StackActions.reset({
-            index: 1,
-            actions: [
-            NavigationActions.navigate({ routeName: 'Main' }),
-            NavigationActions.navigate({ routeName: 'Deck', params: { 'deck': this.state.deckKey} }),
-            NavigationActions.navigate({ routeName: 'Quiz', params: { 'deck': this.state.deckKey} }),
-            ],
+        const correct = this.state.correctAnswer
+        if (this.state.correct) {
+            correct += 1
+        }
+        const resetAction = StackActions.replace({
+            routeName: 'Quiz', 
+            params: { 
+                'deck': this.state.deckKey,
+                'cardIndex': this.state.cardIndex + 1,
+                correctAnswer: correct,
+                questionsAnswered: this.state.questionsAnswered + 1
+            }
         });
         this.props.navigation.dispatch(resetAction);
     }
@@ -69,7 +74,9 @@ class Quiz extends Component {
             showAnswer: false,
             correct: false,
             deckKey: this.props.navigation.state.params.deck,
-            cardIndex: this.props.navigation.state.params.cardIndex
+            cardIndex: this.props.navigation.state.params.cardIndex,
+            correctAnswer: this.props.navigation.state.params.correctAnswer,
+            questionsAnswered: this.props.navigation.state.params.questionsAnswered,
         }
     }
 
@@ -81,7 +88,7 @@ class Quiz extends Component {
             <View style={styles.container}>
                 <Text style={styles.heading}>Quiz</Text>
                 <Text>Questions remaining: {deck.cards.length}</Text>
-                <Text style={styles.text}>{deck.cards[this.state.cardIndex].question}</Text>
+                <Text style={styles.heading}>{deck.cards[this.state.cardIndex].question}</Text>
                 { this.state.showAnswer ? 
                 <View>
                     <Text style={styles.text}>{deck.cards[this.state.cardIndex].answer}</Text>
@@ -90,9 +97,9 @@ class Quiz extends Component {
                         <Switch onValueChange={this.userAnswer}
                             value={this.state.correct}/>
                     </View>
-                    { this.state.cardIndex === deck.cards.length ?
-                        <NextQuestionBtn onPress={this.nextQuestion} /> :
-                        <EndQuizBtn onPress={this.endQuiz} />
+                    { this.state.cardIndex + 1 === deck.cards.length ?
+                        <EndQuizBtn onPress={this.endQuiz} /> :
+                        <NextQuestionBtn onPress={this.nextQuestion} />
                     }
                 </View>:
                 <ShowAnswerBtn onPress={this.showAnswer} />
