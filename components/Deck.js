@@ -12,7 +12,8 @@ class Deck extends Component {
               deck: this.props.navigation.state.params.deck,
               cardIndex: 0,
               correctAnswer: 0,
-              questionsAnswered: 0
+              questionsAnswered: 0,
+              completed: false
             },
         });
           

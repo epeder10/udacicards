@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { View, Text, StyleSheet, TouchableOpacity, Platform, Switch } from 'react-native'
-import { StackActions, NavigationActions } from 'react-navigation'
-import { white, purple} from '../utils/colors'
+import { StackActions } from 'react-navigation'
+import { white, purple, orange } from '../utils/colors'
 
 function ShowAnswerBtn ({ onPress }) {
     return (
@@ -34,6 +34,26 @@ function EndQuizBtn ({ onPress }) {
     )
 }
 
+function BackToDeckBtn ({ onPress }) {
+    return (
+      <TouchableOpacity
+        style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
+        onPress={onPress}>
+          <Text style={styles.submitBtnText}>Back To Deck</Text>
+      </TouchableOpacity>
+    )
+}
+
+function RestartQuizBtn ({ onPress }) {
+    return (
+      <TouchableOpacity
+        style={Platform.OS === 'ios' ? styles.iosSubmitBtn : styles.AndroidSubmitBtn}
+        onPress={onPress}>
+          <Text style={styles.submitBtnText}>Restart Quiz</Text>
+      </TouchableOpacity>
+    )
+}
+
 class Quiz extends Component {
     showAnswer = () => {
         this.setState({
@@ -48,24 +68,52 @@ class Quiz extends Component {
     }
 
     nextQuestion = () => {
-        const correct = this.state.correctAnswer
-        if (this.state.correct) {
-            correct += 1
-        }
-        const resetAction = StackActions.replace({
-            routeName: 'Quiz', 
-            params: { 
-                'deck': this.state.deckKey,
-                'cardIndex': this.state.cardIndex + 1,
-                correctAnswer: correct,
-                questionsAnswered: this.state.questionsAnswered + 1
-            }
-        });
-        this.props.navigation.dispatch(resetAction);
+        this.updateQuiz()
+        
+        this.setState({
+            'cardIndex': this.state.cardIndex + 1,
+            'showAnswer': false
+        })
     }
 
+    updateQuiz = () => {
+        if (this.state.correct) {
+            this.setState({
+                correctAnswer: this.state.correctAnswer + 1,
+            })
+        }
+        this.setState({
+            questionsAnswered: this.state.questionsAnswered + 1,
+        })
+    }
     endQuiz = () => {
-        alert('end!')
+        this.updateQuiz()
+        this.setState({
+            completed: true
+        })
+    }
+
+    restartQuiz = () => {
+        const pushAction = StackActions.replace({
+            routeName: 'Quiz',
+            params: {
+              deck: this.props.navigation.state.params.deck,
+              cardIndex: 0,
+              correctAnswer: 0,
+              questionsAnswered: 0,
+              completed: false,
+            },
+        });
+          
+        this.props.navigation.dispatch(pushAction);
+    }
+
+    backToDeck = () => {
+        const popAction = StackActions.pop({
+            n: 1,
+          });
+          
+        this.props.navigation.dispatch(popAction);
     }
 
     constructor (props) {
@@ -77,17 +125,30 @@ class Quiz extends Component {
             cardIndex: this.props.navigation.state.params.cardIndex,
             correctAnswer: this.props.navigation.state.params.correctAnswer,
             questionsAnswered: this.props.navigation.state.params.questionsAnswered,
+            completed: this.props.navigation.state.params.completed
         }
     }
 
     render () {
         const key = this.props.navigation.state.params.deck
         const deck = this.props.decks[key]
+        const remainingCards = deck.cards.length - this.state.cardIndex
 
+        if (this.state.completed) {
+            const percent = (this.state.correctAnswer / this.state.questionsAnswered) * 100
+            return (
+                <View style={styles.container}>
+                    <Text style={styles.percent}>{ percent }%</Text>
+                    <Text style={styles.text}>You answered {this.state.correctAnswer} questions correct</Text>
+                    <RestartQuizBtn onPress={this.restartQuiz} />
+                    <BackToDeckBtn onPress={this.backToDeck} />
+                </View>
+            )
+        }
         return (
             <View style={styles.container}>
                 <Text style={styles.heading}>Quiz</Text>
-                <Text>Questions remaining: {deck.cards.length}</Text>
+                <Text>Questions remaining: {remainingCards}</Text>
                 <Text style={styles.heading}>{deck.cards[this.state.cardIndex].question}</Text>
                 { this.state.showAnswer ? 
                 <View>
@@ -132,6 +193,14 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         textAlign: 'center',
         fontWeight: 'bold'
+    },
+    percent: {
+        fontSize: 40,
+        paddingTop: 10,
+        paddingBottom: 10,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        color: orange
     },
     submitBtnText: {
         color: white,
