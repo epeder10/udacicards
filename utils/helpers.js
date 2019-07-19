@@ -20,8 +20,8 @@ export function clearLocalNotification () {
   
   function createNotification () {
     return {
-      title: 'Log your stats!',
-      body: "👋 don't forget to log your stats for today!",
+      title: 'Time to take a quiz!',
+      body: "👋 don't forget to take a quiz today!",
       ios: {
         sound: true,
       },
